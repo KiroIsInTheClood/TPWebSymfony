@@ -55,7 +55,7 @@ class FormationsController extends AbstractController {
     }   
         
     /**
-     * @Route("/formations/recherche/{champ}", name="formations.findallcontain")
+     * @Route("/formations/recherche/nom/{champ}", name="formations.findallcontain")
      * @param type $champ
      * @param Request $request
      * @return Response
@@ -69,7 +69,24 @@ class FormationsController extends AbstractController {
             ]);
         }
         return $this->redirectToRoute("formations");
-    }  
+    } 
+    
+    /**
+     * @Route("/formations/recherche/niveau/{champ}", name="formations.findallbyniveau")
+     * @param type $champ
+     * @param Request $request
+     * @return Response
+     */
+    public function findAllByid($champ, Request $request): Response{
+        if($this->isCsrfTokenValid('filtre_'.$champ, $request->get('_token'))){
+            $valeur = $request->get("recherche");
+            $formations = $this->repository->findByNiveau($champ, $valeur);
+            return $this->render(self::PAGEFORMATIONS, [
+                'formations' => $formations
+            ]);
+        }
+        return $this->redirectToRoute("formations");
+    } 
     
     /**
      * @Route("/formations/formation/{id}", name="formations.showone")

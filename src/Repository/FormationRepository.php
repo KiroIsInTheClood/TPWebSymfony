@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Formation;
+use App\Entity\Niveau;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -33,7 +35,7 @@ class FormationRepository extends ServiceEntityRepository
     }
 
     /**
-     * Enregistrements dont un champ contientune valeur
+     * Enregistrements dont un champ contient une valeur
      * ou tous les enregistrements si la valeur est vide
      * @param type $champ
      * @param type $valeur
@@ -48,14 +50,37 @@ class FormationRepository extends ServiceEntityRepository
         }else{
             return $this->createQueryBuilder('f')
                     ->where('f.'.$champ.' LIKE :valeur')
-                    ->setParameter('valeur', $valeur)
                     ->orderBy('f.publishedAt', 'DESC')
                     ->setParameter('valeur', '%'.$valeur.'%')
                     ->getQuery()
                     ->getResult();            
         }
     }
-        
+       
+    /**
+     * Enregistrements dont un champ contient l'id du niveau
+     * ou tous les enregistrements si la valeur envoyée est vide
+     * @param type $champ
+     * @param type $valeur
+     * @return array
+     */
+    public function findByNiveau($champ, $valeur): array{
+        if($valeur==""){
+            return $this->createQueryBuilder('f')
+                    ->orderBy('f.'.$champ, 'ASC')
+                    ->getQuery()
+                    ->getResult();
+        }else{
+            return $this->createQueryBuilder('f')
+                    ->leftJoin(Niveau::class, "n", Expr\Join::WITH, "f.".$champ." = n.id")
+                    ->where('n.nom LIKE :valeur')
+                    ->orderBy('f.publishedAt', 'DESC')
+                    ->setParameter('valeur', '%'.$valeur.'%')
+                    ->getQuery()
+                    ->getResult();         
+        }
+    }
+       
     /**
      * Retourne les n formations les plus récentes
      * @param type $nb

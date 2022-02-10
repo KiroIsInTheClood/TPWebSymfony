@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use DateTime;
 use DateTimeInterface;
 use App\Repository\FormationRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -48,6 +47,11 @@ class Formation
      * @ORM\Column(type="string", length=11, nullable=true)
      */
     private $videoId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Niveau::class)
+     */
+    private $idNiveau;
 
     public function getId(): ?int
     {
@@ -126,6 +130,18 @@ class Formation
     public function setVideoId(?string $videoId): self
     {
         $this->videoId = $videoId;
+
+        return $this;
+    }
+
+    public function getIdNiveau(): ?Niveau
+    {
+        return $this->idNiveau;
+    }
+
+    public function setIdNiveau(?Niveau $idNiveau): self
+    {
+        $this->idNiveau = $idNiveau;
 
         return $this;
     }

@@ -58,7 +58,7 @@ class FormationRepository extends ServiceEntityRepository
     }
        
     /**
-     * Enregistrements dont un champ contient l'id du niveau
+     * Enregistrements dont un champ contient le nom du niveau
      * ou tous les enregistrements si la valeur envoyée est vide
      * @param type $champ
      * @param type $valeur

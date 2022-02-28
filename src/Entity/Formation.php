@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use DateTimeInterface;
 use App\Repository\FormationRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,11 +21,14 @@ class Formation
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\LessThanOrEqual("+1 hour")
      */
     private $publishedAt;
 
     /**
      * @ORM\Column(type="string", length=91, nullable=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=91)
      */
     private $title;
 
@@ -35,16 +39,19 @@ class Formation
 
     /**
      * @ORM\Column(type="string", length=46, nullable=true)
+     * @Assert\Length(max=46)
      */
     private $miniature;
 
     /**
      * @ORM\Column(type="string", length=48, nullable=true)
+     * @Assert\Length(max=48)
      */
     private $picture;
 
     /**
      * @ORM\Column(type="string", length=11, nullable=true)
+     * @Assert\Length(max=11)
      */
     private $videoId;
 
